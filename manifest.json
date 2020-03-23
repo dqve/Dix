@@ -1,0 +1,18 @@
+{
+    "name": "Dix",
+    "version": "1.0",
+    "manifest_version": 2,
+    "browser_action": {
+        "default_popup": "example/example.html"
+    },
+
+    "content_scripts" : [
+    {
+      "matches": [ "<all_urls>" ],
+      "css": ["example/example.css", "build/notifications.css", "example/font/decibel-meter/style.css"],
+      "js": ["build/notifications.js", "build/decibel-meter.js"]
+    }
+  ],
+
+    "content_security_policy": "script-src 'self' 'sha256-GgRxrVOKNdB4LrRsVPDSbzvfdV4UqglmviH9GoBJ5jk='; object-src 'self'"
+}
