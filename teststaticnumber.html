@@ -5,29 +5,24 @@
 </head>
 <body>
 
-<input id="value" type="number" name="enter number">
+	<input id="value" type="number" name="enter number">
 
-<p id="val"></p>
+	<p id="val"></p>
 
-<script type="text/javascript">
+	<script type="text/javascript">
+		
+		var value = document.getElementById('value');
 
-var value = document.getElementById('value');
+		if (value == 50) {
 
-if (value == 50) {
+			check = value;
+			document.getElementById("val").innerHTML = check;
 
-	check = value;
-	document.getElementById("val").innerHTML = check;
+		} else {
+			document.getElementById("val").innerHTML = value;
+		}	
 
-} else {
-	document.getElementById("val").innerHTML = value;
-}	
-
-
-
-
-</script>
-
-
+	</script>
 
 </body>
 </html>
