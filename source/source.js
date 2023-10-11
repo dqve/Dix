@@ -49,9 +49,12 @@
 
 	const level = document.getElementById('db-mini')
 
-	meter.on('sample', (dB, percent, value, deb) => level.textContent = `${deb} dB`)
+	// meter.on('sample', (dB, percent, value, deb) => level.textContent = `${deb} dB`)
 
+	// meter.on('sample', (dB, percent, value, deb) => textPer.textContent = `${dB} dB`)
 
+	// showPer
+	// textPer
 
 	const mini = document.getElementById('db-level')
 
