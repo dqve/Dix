@@ -3,12 +3,7 @@ var DecibelMeter = ( function ( window, navigator, document, undefined ) {
 	
 	// user media
 	
-	if (!navigator.getUserMedia)
-		navigator.getUserMedia = navigator.webkitGetUserMedia
-								|| navigator.mozGetUserMedia
-								|| navigator.msGetUserMedia;
-	
-	if (!navigator.getUserMedia) {
+	if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
 		throw new Error('DecibelMeter: getUserMedia not supported');
 		return undefined;
 	}
@@ -26,11 +21,6 @@ var DecibelMeter = ( function ( window, navigator, document, undefined ) {
 	
 	// audio sources
 	
-	if (!navigator.mediaDevices) {
-		throw new Error('DecibelMeter: MediaStreamTrack not supported');
-		return undefined;
-	}
-	
 	if (!navigator.mediaDevices.enumerateDevices) {
 		throw new Error('DecibelMeter: mediaDevices.enumerateDevices() not supported');
 		return undefined;
@@ -42,9 +32,9 @@ var DecibelMeter = ( function ( window, navigator, document, undefined ) {
 	
 	navigator.mediaDevices.enumerateDevices().then(function(srcs){		
 		srcs.forEach( function (source) {
-			if (source.kind === 'audiooutput') {
+			if (source.kind === 'audioinput') {
 				sources.push(source);
-				sourcesIndex[source.id] = source;
+				sourcesIndex[source.deviceId] = source;
 			}
 		});
 		
@@ -63,7 +53,7 @@ var DecibelMeter = ( function ( window, navigator, document, undefined ) {
 		
 		var oldSource = meter.source,
 			changing = oldSource !== null,
-			constraints = { audio: { optional: [{sourceId: source.id}] } };	
+			constraints = { audio: source.deviceId ? { deviceId: { exact: source.deviceId } } : true };
 		
 		meter.source = source;
 		
@@ -91,11 +81,9 @@ var DecibelMeter = ( function ( window, navigator, document, undefined ) {
 				dispatch(meter, 'connect', [meter, source]);
 		}
 		
-		function error() {
+		navigator.mediaDevices.getUserMedia(constraints).then(success).catch(function() {
 			alert('Error connecting to source');
-		}
-		
-		navigator.getUserMedia(constraints, success, error);
+		});
 	}
 	
 	function dispatch(meter, eventName, params) {
